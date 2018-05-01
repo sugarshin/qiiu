@@ -36,7 +36,10 @@
   ],
   "homepage": "https://github.com/sugarshin/qiiu",
   "keywords": [
-    "oclif"
+    "oclif",
+    "qiita",
+    "image",
+    "upload"
   ],
   "license": "MIT",
   "main": "lib/index.js",

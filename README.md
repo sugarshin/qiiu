@@ -1,7 +1,6 @@
-qiiu
-====
+# qiiu
 
-Upload image to Qiita
+Upload image to [Qiita](https://qiita.com/).
 
 [![Version](https://img.shields.io/npm/v/qiiu.svg)](https://npmjs.org/package/qiiu)
 [![CircleCI](https://circleci.com/gh/sugarshin/qiiu/tree/master.svg?style=shield)](https://circleci.com/gh/sugarshin/qiiu/tree/master)
@@ -10,8 +9,20 @@ Upload image to Qiita
 [![Downloads/week](https://img.shields.io/npm/dw/qiiu.svg)](https://npmjs.org/package/qiiu)
 [![License](https://img.shields.io/npm/l/qiiu.svg)](https://github.com/sugarshin/qiiu/blob/master/package.json)
 
-<!-- toc -->
-# Usage
-<!-- usage -->
-# Commands
-<!-- commands -->
+```sh
+yarn global add qiiu
+
+# or
+
+npm install -g qiiu
+```
+
+## Usage
+
+```sh
+qiiu ./example.png
+```
+
+## Commands
+
+TBD
