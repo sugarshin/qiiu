@@ -20,7 +20,9 @@ npm install -g qiiu
 ## Usage
 
 ```sh
-qiiu --username=$QIITA_USERNAME --password=$PASSWORD ./path/to/example.png
+$ qiiu --username=$QIITA_USERNAME --password=$PASSWORD ./path/to/example.png
+
+https://qiita-image-store.s3.amazonaws.com/0/2432/df89ffdd-f8f8-fd0s-4124-sdddfd9d6f5f.png
 ```
 
 ## Options
