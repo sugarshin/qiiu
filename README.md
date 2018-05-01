@@ -20,9 +20,22 @@ npm install -g qiiu
 ## Usage
 
 ```sh
-qiiu ./example.png
+qiiu --username=$QIITA_USERNAME --password=$PASSWORD ./path/to/example.png
 ```
 
-## Commands
+## Options
 
-TBD
+```sh
+$ qiiu --help
+Upload image to Qiita
+
+USAGE
+  $ qiiu [FILEPATH]
+
+OPTIONS
+  -c, --backupcode=backupcode  Qiita backup code. this required if you 2 factor authentication enabled
+  -h, --help                   show CLI help
+  -p, --password=password      (required) Qiita password
+  -u, --username=username      (required) Qiita username
+  -v, --version                show CLI version
+```
