@@ -1,0 +1,52 @@
+{
+  "name": "qiiu",
+  "description": "Upload image to Qiita",
+  "version": "0.0.0",
+  "author": "sugarshin @sugarshin",
+  "bin": {
+    "qiiu": "./bin/run"
+  },
+  "bugs": "https://github.com/sugarshin/qiiu/issues",
+  "dependencies": {
+    "@oclif/command": "1",
+    "@oclif/config": "1",
+    "@oclif/plugin-help": "1"
+  },
+  "devDependencies": {
+    "@oclif/test": "1",
+    "@oclif/tslint": "1",
+    "@types/chai": "4",
+    "@types/mocha": "5",
+    "@types/node": "9",
+    "chai": "4",
+    "mocha": "5",
+    "nyc": "11",
+    "ts-node": "5",
+    "tslib": "1",
+    "tslint": "5",
+    "typescript": "2.8"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "files": [
+    "/bin",
+    "/lib"
+  ],
+  "homepage": "https://github.com/sugarshin/qiiu",
+  "keywords": [
+    "oclif"
+  ],
+  "license": "MIT",
+  "main": "lib/index.js",
+  "oclif": {
+    "bin": "qiiu"
+  },
+  "repository": "sugarshin/qiiu",
+  "scripts": {
+    "posttest": "tsc -p test --noEmit && tslint -p test -t stylish",
+    "prepack": "rm -rf lib && tsc",
+    "test": "nyc mocha --forbid-only \"test/**/*.test.ts\""
+  },
+  "types": "lib/index.d.ts"
+}
