@@ -1,28 +1,31 @@
 import {Command, flags} from '@oclif/command'
 
+import {upload} from './upload'
+
 class Qiiu extends Command {
-  static description = 'describe the command here'
+  static description = 'Upload image to Qiita'
 
   static flags = {
-    // add --version flag to show CLI version
     version: flags.version({char: 'v'}),
     help: flags.help({char: 'h'}),
-    // flag with a value (-n, --name=VALUE)
-    name: flags.string({char: 'n', description: 'name to print'}),
-    // flag with no value (-f, --force)
-    force: flags.boolean({char: 'f'}),
+    username: flags.string({char: 'u', description: 'Qiita username', required: true}),
+    password: flags.string({char: 'p', description: 'Qiita password', required: true}),
+    backupcode: flags.string({
+      char: 'c',
+      description: 'Qiita backup code. this required if you 2 factor authentication enabled',
+    }),
   }
 
-  static args = [{name: 'file'}]
+  static args = [{name: 'filePath'}]
 
   async run() {
     const {args, flags} = this.parse(Qiiu)
-
-    const name = flags.name || 'world'
-    this.log(`hello ${name} from ./src/index.ts`)
-    if (args.file && flags.force) {
-      this.log(`you input --force and --file: ${args.file}`)
-    }
+    const imageUrl: string = await upload(args.filePath, {
+      username: flags.username,
+      password: flags.password,
+      backupcode: flags.backupcode,
+    })
+    this.log(imageUrl)
   }
 }
 
