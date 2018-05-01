@@ -75,7 +75,7 @@ export const upload = async (
 
     const ret = isHtml(value) ?
       value.match(/<img[^>]+src="([^">]+)"/) :
-      (typeof value === 'string' ? value.match(/\!\[.*\]\((.+)\)/) : null)
+      value.match(/\!\[.*\]\((.+)\)/)
     if (ret) {
       return ret[1]
     } else {
