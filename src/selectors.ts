@@ -6,3 +6,6 @@ export const twoFactorAuthFormSubmit: string = 'form[action="/login/recover"] in
 export const fileUploadButton: string = '.editorMarkdown_imagePicker input[type=file]'
 export const markdownInputArea: string = 'textarea.editorMarkdown_textarea'
 export const draftDeleteButton: string = '.draftsPreviewMenu_delete button'
+export const userMenuOpenButton: string = '.st-Header .st-Header_end .st-Header_loginUser'
+export const userMenu: string = `${userMenuOpenButton} + .st-Header_dropdown`
+export const userMenuItems: string = ':scope > *'

@@ -1,8 +1,8 @@
 import isHtml = require('is-html')
 import * as puppeteer from 'puppeteer'
 
-import {DRAFTS_NEW_URL, DRAFTS_URL, LOGIN_URL, RECOVER_URL, TWO_FACTOR_AUTH_URL} from './constants'
 import * as selectors from './selectors'
+import {DRAFTS_NEW_URL, DRAFTS_URL, LOGIN_URL, RECOVER_URL, TOP_URL, TWO_FACTOR_AUTH_URL} from './urls'
 
 export const upload = async (
   filepath: string,
@@ -99,6 +99,19 @@ export const upload = async (
       throw new Error(`Can't find \`${selectors.draftDeleteButton}\``)
     }
     await page.waitForNavigation({waitUntil: 'networkidle0'})
+
+    // Log out
+    await page.goto(TOP_URL)
+    const userMenuOpenButton = await page.$(selectors.userMenuOpenButton)
+    if (userMenuOpenButton) {
+      await userMenuOpenButton.click()
+    } else {
+      throw new Error(`Can't find \`${selectors.userMenuOpenButton}\``)
+    }
+    const userMenu = await page.$(selectors.userMenu)
+    const userMenuItems = await userMenu.$$(selectors.userMenuItems)
+    await userMenuItems[userMenuItems.length - 1].click()
+    await page.waitForNavigation({waitUntil: 'networkidle2'})
 
     await browser.close()
 
