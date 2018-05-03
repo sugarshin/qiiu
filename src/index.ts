@@ -14,6 +14,7 @@ class Qiiu extends Command {
       char: 'c',
       description: 'Qiita backup code. this required if you 2 factor authentication enabled',
     }),
+    verbose: flags.boolean({description: 'output verbose messages on internal operations'})
   }
 
   static args = [{name: 'filePath'}]
@@ -24,6 +25,7 @@ class Qiiu extends Command {
       username: flags.username,
       password: flags.password,
       backupcode: flags.backupcode,
+      verbose: flags.verbose,
     })
     this.log(imageUrl)
   }
