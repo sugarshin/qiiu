@@ -1,7 +1,7 @@
 {
   "name": "qiiu",
   "description": "Upload image to Qiita",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "author": "sugarshin @sugarshin",
   "bin": {
     "qiiu": "./bin/run"
