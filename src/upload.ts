@@ -1,17 +1,47 @@
 import isHtml = require('is-html')
 import * as puppeteer from 'puppeteer'
 
-import {DRAFTS_NEW_URL, DRAFTS_URL, LOGIN_URL, RECOVER_URL, TWO_FACTOR_AUTH_URL} from './constants'
+import {last, noop} from './helpers'
 import * as selectors from './selectors'
+import {DRAFTS_NEW_URL, DRAFTS_URL, LOGIN_URL, RECOVER_URL, TOP_URL, TWO_FACTOR_AUTH_URL} from './urls'
 
 export const upload = async (
-  filepath: string,
-  options: {username: string, password: string, backupcode?: string}
+  imagePath: string,
+  options: {username: string, password: string, backupcode?: string, verbose?: boolean}
 ): Promise<string> => {
-  const {username, password, backupcode} = options
+  const {username, password, backupcode, verbose} = options
   try {
     const browser = await puppeteer.launch()
     const page = await browser.newPage()
+
+    if (verbose) {
+      await page.setRequestInterception(true)
+
+      page.on('request', request => {
+        console.log( // tslint:disable-line
+          '== `request` ==\n\n' +
+          `  > ${request.method()} ${request.url()}`
+        )
+        console.log( // tslint:disable-line
+          '  > headers:\n', request.headers(), '\n\n'
+        )
+        request.continue().catch(noop) // for linter
+      })
+      page.on('requestfinished', request => {
+        console.log( // tslint:disable-line
+          '== `requestfinished` ==\n\n' +
+          `  > ${request.url()}` +
+          '\n\n'
+        )
+      })
+      page.on('requestfailed', request => {
+        console.log( // tslint:disable-line
+          '== `requestfailed` ==\n\n' +
+          `  > ${request.url()}`
+        )
+        console.log(request.failure(), '\n\n') // tslint:disable-line
+      })
+    }
 
     // Log into Qiita
     await page.goto(LOGIN_URL)
@@ -31,7 +61,6 @@ export const upload = async (
         throw new Error('This account is two-factor authentication enabled. should required backupcode.')
       }
       await page.goto(RECOVER_URL)
-      await page.waitForSelector(selectors.recoveryCodeInput)
       await page.type(selectors.recoveryCodeInput, backupcode)
       const authorizeButton = await page.$(selectors.twoFactorAuthFormSubmit)
       if (authorizeButton) {
@@ -44,10 +73,9 @@ export const upload = async (
 
     // New article creation
     await page.goto(DRAFTS_NEW_URL)
-    await page.waitForSelector(selectors.fileUploadButton)
     const inputFile = await page.$(selectors.fileUploadButton)
     if (inputFile) {
-      await inputFile.uploadFile(filepath)
+      await inputFile.uploadFile(imagePath)
     } else {
       throw new Error(`Can't find \`${selectors.fileUploadButton}\``)
     }
@@ -57,7 +85,6 @@ export const upload = async (
 
     // Delete current draft
     await page.goto(DRAFTS_URL)
-    await page.waitForSelector(selectors.draftDeleteButton)
     const deleteButton = await page.$(selectors.draftDeleteButton)
     page.once('dialog', async dialog => {
       if (dialog.type() === 'confirm') {
@@ -70,6 +97,30 @@ export const upload = async (
       throw new Error(`Can't find \`${selectors.draftDeleteButton}\``)
     }
     await page.waitForNavigation({waitUntil: 'networkidle0'})
+
+    // Log out
+    await page.goto(TOP_URL)
+    const userMenuOpenButton = await page.$(selectors.userMenuOpenButton)
+    if (userMenuOpenButton) {
+      await userMenuOpenButton.click()
+    } else {
+      throw new Error(`Can't find \`${selectors.userMenuOpenButton}\``)
+    }
+    const userMenu = await page.$(selectors.userMenu)
+    if (userMenu) {
+      const userMenuItems = await userMenu.$$(selectors.userMenuItems)
+      let logoutCell
+      if (userMenuItems && (logoutCell = last(userMenuItems))) {
+        await logoutCell.click()
+      } else {
+        throw new Error('Can\'t find `logout cell`')
+      }
+    } else {
+      throw new Error(`Can't find \`${selectors.userMenu}\``)
+    }
+    const userMenuItems = await userMenu.$$(selectors.userMenuItems)
+    await userMenuItems[userMenuItems.length - 1].click()
+    await page.waitForNavigation({waitUntil: 'networkidle2'})
 
     await browser.close()
 
