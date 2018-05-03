@@ -1,6 +1,7 @@
 import isHtml = require('is-html')
 import * as puppeteer from 'puppeteer'
 
+import {last, noop} from './helpers'
 import * as selectors from './selectors'
 import {DRAFTS_NEW_URL, DRAFTS_URL, LOGIN_URL, RECOVER_URL, TOP_URL, TWO_FACTOR_AUTH_URL} from './urls'
 
@@ -24,7 +25,7 @@ export const upload = async (
         console.log( // tslint:disable-line
           '  > headers:\n', request.headers(), '\n\n'
         )
-        request.continue()
+        request.continue().catch(noop) // for linter
       })
       page.on('requestfinished', request => {
         console.log( // tslint:disable-line
@@ -106,6 +107,17 @@ export const upload = async (
       throw new Error(`Can't find \`${selectors.userMenuOpenButton}\``)
     }
     const userMenu = await page.$(selectors.userMenu)
+    if (userMenu) {
+      const userMenuItems = await userMenu.$$(selectors.userMenuItems)
+      let logoutCell
+      if (userMenuItems && (logoutCell = last(userMenuItems))) {
+        await logoutCell.click()
+      } else {
+        throw new Error('Can\'t find `logout cell`')
+      }
+    } else {
+      throw new Error(`Can't find \`${selectors.userMenu}\``)
+    }
     const userMenuItems = await userMenu.$$(selectors.userMenuItems)
     await userMenuItems[userMenuItems.length - 1].click()
     await page.waitForNavigation({waitUntil: 'networkidle2'})
