@@ -17,11 +17,11 @@ class Qiiu extends Command {
     verbose: flags.boolean({description: 'output verbose messages on internal operations'})
   }
 
-  static args = [{name: 'filePath'}]
+  static args = [{name: 'imagePath'}]
 
   async run() {
     const {args, flags} = this.parse(Qiiu)
-    const imageUrl: string = await upload(args.filePath, {
+    const imageUrl: string = await upload(args.imagePath, {
       username: flags.username,
       password: flags.password,
       backupcode: flags.backupcode,

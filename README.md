@@ -32,7 +32,7 @@ $ qiiu --help
 Upload image to Qiita
 
 USAGE
-  $ qiiu [FILEPATH]
+  $ qiiu [IMAGEPATH]
 
 OPTIONS
   -c, --backupcode=backupcode  Qiita backup code. this required if you 2 factor authentication enabled
@@ -40,4 +40,5 @@ OPTIONS
   -p, --password=password      (required) Qiita password
   -u, --username=username      (required) Qiita username
   -v, --version                show CLI version
+  --verbose                    output verbose messages on internal operations
 ```

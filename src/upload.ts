@@ -5,7 +5,7 @@ import * as selectors from './selectors'
 import {DRAFTS_NEW_URL, DRAFTS_URL, LOGIN_URL, RECOVER_URL, TOP_URL, TWO_FACTOR_AUTH_URL} from './urls'
 
 export const upload = async (
-  filepath: string,
+  imagePath: string,
   options: {username: string, password: string, backupcode?: string, verbose?: boolean}
 ): Promise<string> => {
   const {username, password, backupcode, verbose} = options
@@ -74,7 +74,7 @@ export const upload = async (
     await page.goto(DRAFTS_NEW_URL)
     const inputFile = await page.$(selectors.fileUploadButton)
     if (inputFile) {
-      await inputFile.uploadFile(filepath)
+      await inputFile.uploadFile(imagePath)
     } else {
       throw new Error(`Can't find \`${selectors.fileUploadButton}\``)
     }
