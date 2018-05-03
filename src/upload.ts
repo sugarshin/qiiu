@@ -60,7 +60,6 @@ export const upload = async (
         throw new Error('This account is two-factor authentication enabled. should required backupcode.')
       }
       await page.goto(RECOVER_URL)
-      await page.waitForSelector(selectors.recoveryCodeInput)
       await page.type(selectors.recoveryCodeInput, backupcode)
       const authorizeButton = await page.$(selectors.twoFactorAuthFormSubmit)
       if (authorizeButton) {
@@ -73,7 +72,6 @@ export const upload = async (
 
     // New article creation
     await page.goto(DRAFTS_NEW_URL)
-    await page.waitForSelector(selectors.fileUploadButton)
     const inputFile = await page.$(selectors.fileUploadButton)
     if (inputFile) {
       await inputFile.uploadFile(filepath)
@@ -86,7 +84,6 @@ export const upload = async (
 
     // Delete current draft
     await page.goto(DRAFTS_URL)
-    await page.waitForSelector(selectors.draftDeleteButton)
     const deleteButton = await page.$(selectors.draftDeleteButton)
     page.once('dialog', async dialog => {
       if (dialog.type() === 'confirm') {
